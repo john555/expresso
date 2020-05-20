@@ -8,7 +8,7 @@ import {
 
 export class Expresso implements IExpresso {
   private methodCallbackLookup: Map<string, Map<string, Function>> = new Map();
-  private server: Server;
+  private server?: Server | null;
   private methods: string[] = [
     "options",
     "get",
@@ -21,7 +21,7 @@ export class Expresso implements IExpresso {
   public serverOptions: IServerOptions = { port: 8000 };
 
   constructor(serverOptions?: IServerOptions) {
-    this.server = serve({ port: 8000 });
+    this.server = null;
     this.init(serverOptions);
   }
 
@@ -50,7 +50,7 @@ export class Expresso implements IExpresso {
 
   handleRequest(request: ServerRequest) {
     const routeCallbackLookup = this.methodCallbackLookup.get(
-      request.method.toLowerCase()
+      request.method.toLowerCase(),
     );
 
     if (!routeCallbackLookup) {
@@ -60,9 +60,9 @@ export class Expresso implements IExpresso {
     const routeCallback:
       | Function
       | undefined = this.getCallbackFromRouteCallbackLookup(
-      routeCallbackLookup,
-      request.url
-    );
+        routeCallbackLookup,
+        request.url,
+      );
 
     if (!routeCallback) {
       throw new Error("HTTP Not Found Error");
@@ -89,10 +89,10 @@ export class Expresso implements IExpresso {
 
   getCallbackFromRouteCallbackLookup(
     routeCallbackLookup: Map<string, Function>,
-    requestUrl: string
+    requestUrl: string,
   ): Function {
     const routeCallback: Function | undefined = routeCallbackLookup.get(
-      requestUrl
+      requestUrl,
     );
 
     if (!routeCallback) {
@@ -104,6 +104,7 @@ export class Expresso implements IExpresso {
 
   async listen(callback: Function): Promise<void> {
     callback();
+    this.server = serve({ port: 8000 });
     for await (const request of this.server!) {
       this.handleRequest(request);
     }
