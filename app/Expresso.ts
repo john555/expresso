@@ -2,20 +2,9 @@ import {
   serve,
   ServerRequest,
   Server,
-} from "https://deno.land/std@0.50.0/http/server.ts";
-
-export interface IServerOptions {
-  port: number;
-}
-
-export interface IExpresso {
-  options?: Function;
-  get?: Function;
-  post?: Function;
-  put?: Function;
-  patch?: Function;
-  delete?: Function;
-}
+  IExpresso,
+  IServerOptions,
+} from "../deps.ts";
 
 export class Expresso implements IExpresso {
   private methodCallbackLookup: Map<string, Map<string, Function>> = new Map();
@@ -27,6 +16,7 @@ export class Expresso implements IExpresso {
     "put",
     "patch",
     "delete",
+    "head",
   ];
   public serverOptions: IServerOptions = { port: 8000 };
 
@@ -118,8 +108,4 @@ export class Expresso implements IExpresso {
       this.handleRequest(request);
     }
   }
-}
-
-export function expresso(serverOptions?: IServerOptions) {
-  return new Expresso(serverOptions);
 }

@@ -1,4 +1,4 @@
-import { expresso } from "./routing/Expresso.ts";
+import { expresso } from "../mod.ts";
 
 const app = expresso();
 
