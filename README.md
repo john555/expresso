@@ -11,7 +11,7 @@ This is an **experimental** for a routing system for [Deno](https://deno.land/).
 ```
 git clone https://github.com/john555/expresso.git
 cd expresso
-deno run --allow-net example.ts
+deno run --allow-net examples/example.ts
 ```
 
 Go to Postman and hit the routes following example.
@@ -19,7 +19,7 @@ Go to Postman and hit the routes following example.
 ## Example
 
 ```ts
-import { expresso } from "./library/index.ts";
+import { expresso } from "./mod.ts";
 
 const app = expresso();
 
